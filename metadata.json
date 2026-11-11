@@ -1,0 +1,6 @@
+{
+  "name": "Chiado Finest - English Learning",
+  "description": "Applicazione web didattica e PWA di lingua inglese per studenti della scuola secondaria di primo grado (11-14 anni) con quiz di Vocabulary e Grammar.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

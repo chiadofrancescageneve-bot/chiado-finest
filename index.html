@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chiado Finest - English Learning</title>
+    <meta name="description" content="Applicazione web didattica e PWA di lingua inglese per studenti della scuola secondaria di primo grado (11-14 anni) con quiz di Vocabulary e Grammar." />
+    
+    <!-- Open Graph & Social Cards -->
+    <meta property="og:title" content="Chiado Finest - English Learning" />
+    <meta property="og:description" content="Applicazione web didattica e PWA di lingua inglese per studenti della scuola secondaria di primo grado (11-14 anni) con quiz di Vocabulary e Grammar." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    <!-- Mobile & PWA Meta -->
+    <meta name="theme-color" content="#4F46E5" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="ChiadoFinest" />
+    
+    <!-- PWA Manifest & Icons (Relative Paths for GitHub Pages compatibility) -->
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    
+    <!-- Pure Standalone CSS -->
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <!-- Offline Connectivity Banner -->
+    <div id="offline-banner" class="offline-banner">
+      📡 Modalità Offline: Stai usando l'app senza connessione internet. Tutti i quiz e le funzioni continuano a funzionare!
+    </div>
+
+    <!-- Top Sticky Header -->
+    <header class="header-bar">
+      <div class="header-content">
+        <a id="brand-link" class="brand-wrapper" href="./" title="Torna alla Home">
+          <img src="./icons/icon.svg" alt="Chiado Finest Logo" class="brand-icon" width="42" height="42" />
+          <div>
+            <h1 class="brand-title">Chiado Finest</h1>
+            <span class="brand-subtitle">English Learning • Scuola Media</span>
+          </div>
+        </a>
+
+        <div class="header-actions">
+          <!-- Sound toggle -->
+          <button id="btn-sound-toggle" class="btn-icon" title="Attiva/Disattiva Suoni" aria-label="Attiva o disattiva audio">
+            🔊
+          </button>
+          
+          <!-- Teacher Area Modal -->
+          <button id="btn-teacher-modal" class="btn-teacher" title="Area Docente e QR Code per la classe">
+            👨‍🏫 <span>Area Docente & QR</span>
+          </button>
+          
+          <!-- Install PWA Button (Shows only when installable) -->
+          <button id="btn-install-pwa" class="btn-install" style="display: none;" title="Aggiungi alla schermata home">
+            📲 <span>Installa App</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="app-container">
+      
+      <!-- HERO SECTION -->
+      <section id="hero-section" class="hero-card">
+        <div class="hero-badge-wrap">
+          <span class="hero-pill">🇬🇧 Inglese per 11-14 anni</span>
+          <span class="hero-pill">🎒 Scuola Secondaria di 1° Grado</span>
+          <span class="hero-pill">✨ Livelli A1 - A2 - B1</span>
+        </div>
+        <h2 class="hero-title">Benvenuto su <span>Chiado Finest</span>!</h2>
+        <p class="hero-desc">
+          Allenati e impara la lingua inglese in modo divertente! Esplora gli argomenti di <strong>Vocabulary</strong> e le regole di <strong>Grammar</strong>, rispondi ai quiz con correzione automatica, ascolta la pronuncia corretta e impara dalle spiegazioni didattiche passo dopo passo.
+        </p>
+        <div class="hero-buttons">
+          <button id="btn-start-quick" class="btn-primary-hero">
+            ⚡ Sfida Rapida (10 Quiz)
+          </button>
+          <button id="btn-explore-all" class="btn-secondary-hero">
+            📚 Sfoglia Argomenti
+          </button>
+        </div>
+      </section>
+
+      <!-- QUICK STATS BAR -->
+      <section id="stats-bar" class="stats-bar">
+        <div class="stat-item">
+          <div class="stat-icon" style="background:#EEF2FF; color:#4F46E5;">📖</div>
+          <div class="stat-info">
+            <h4 id="stat-vocab-count">17</h4>
+            <p>Sezioni Vocabulary</p>
+          </div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon" style="background:#F5F3FF; color:#7C3AED;">📐</div>
+          <div class="stat-info">
+            <h4 id="stat-grammar-count">16</h4>
+            <p>Sezioni Grammar</p>
+          </div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon" style="background:#ECFDF5; color:#059669;">🎯</div>
+          <div class="stat-info">
+            <h4 id="stat-questions-total">100+</h4>
+            <p>Quiz con Spiegazioni</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- NAVIGATION TABS -->
+      <nav id="section-nav" class="section-nav" aria-label="Sezioni Principali">
+        <button class="tab-btn active" data-section="vocabulary">
+          <span>📚 Vocabulary (Lessico)</span>
+          <span id="badge-vocab" class="tab-badge">17</span>
+        </button>
+        <button class="tab-btn" data-section="grammar">
+          <span>📐 Grammar (Grammatica)</span>
+          <span id="badge-grammar" class="tab-badge">16</span>
+        </button>
+        <button class="tab-btn" data-section="study">
+          <span>💡 Flashcards & Regole</span>
+        </button>
+      </nav>
+
+      <!-- TOOLBAR & FILTERS -->
+      <section id="toolbar" class="toolbar">
+        <div class="level-selector" role="group" aria-label="Filtro Livello di Difficoltà">
+          <span style="font-size:0.8rem; font-weight:700; color:#64748B; align-self:center; margin-right:4px;">Livello:</span>
+          <button class="level-btn active" data-level="all">Tutti i Livelli</button>
+          <button class="level-btn" data-level="beginner">🟢 Beginner (1ª Media)</button>
+          <button class="level-btn" data-level="intermediate">🟡 Intermediate (2ª Media)</button>
+          <button class="level-btn" data-level="advanced">🟣 Advanced (3ª Media)</button>
+        </div>
+
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" class="search-input" placeholder="Cerca argomento (es. past, food, animals)..." />
+        </div>
+      </section>
+
+      <!-- CATEGORY TITLE & GRID -->
+      <div style="margin-top:24px; display:flex; justify-content:space-between; align-items:center;">
+        <h3 id="grid-title" style="font-size:1.15rem; font-weight:800; color:#1E293B;">Argomenti</h3>
+      </div>
+      <section id="category-grid" class="category-grid">
+        <!-- Rendered dynamically by script.js -->
+      </section>
+
+      <!-- ============================================== -->
+      <!-- DEDICATED STUDY MODE (Flashcards & Grammar Rules) -->
+      <!-- ============================================== -->
+      <section id="study-mode-container" class="study-mode-container" style="display: none;" aria-live="polite">
+        <!-- Study Header Info -->
+        <div class="study-header-card">
+          <div class="study-top-row">
+            <div class="study-title-badge">
+              <button id="btn-exit-study" class="btn-icon" title="Torna agli argomenti" aria-label="Torna indietro">
+                ←
+              </button>
+              <div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <h3 id="study-topic-name" class="study-cat-name">Nome Argomento</h3>
+                  <span id="study-level-tag" class="quiz-level-tag beginner">BEGINNER</span>
+                </div>
+                <span id="study-topic-sub" class="cat-subtitle" style="display:block; margin-top:2px;">Sottotitolo</span>
+              </div>
+            </div>
+
+            <!-- View Switcher & Start Quiz CTA -->
+            <div class="study-header-actions">
+              <div class="study-view-switcher" role="tablist">
+                <button id="tab-flashcards-mode" class="study-switch-btn active" role="tab" aria-selected="true">
+                  🎴 Flashcards (<span id="flashcard-total-count">0</span>)
+                </button>
+                <button id="tab-rules-mode" class="study-switch-btn" role="tab" aria-selected="false">
+                  📑 Regole & Scheda
+                </button>
+              </div>
+
+              <button id="btn-study-to-quiz" class="btn-primary-study-quiz" title="Avvia il quiz su questo argomento">
+                🎯 Fai il Quiz <span>→</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Progress Bar for Study -->
+          <div id="study-progress-wrapper" class="progress-track" style="margin-top: 14px;" aria-label="Progresso ripasso flashcard">
+            <div id="study-progress-fill" class="progress-fill" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <!-- 1. INTERACTIVE FLASHCARDS VIEW -->
+        <div id="study-flashcards-view" class="study-content-panel">
+          <!-- 3D Flippable Card Stage -->
+          <div class="flashcard-stage">
+            <div id="flashcard-card" class="flashcard-card" tabindex="0" role="button" aria-label="Carta di studio interattiva. Clicca per girare">
+              <!-- FRONT -->
+              <div class="flashcard-face flashcard-front">
+                <div class="flashcard-top-indicator">
+                  <span id="fc-counter" class="fc-counter-badge">Carta 1 di 6</span>
+                  <button id="fc-front-tts" class="btn-tts-sm" title="Ascolta pronuncia in inglese" aria-label="Ascolta termine inglese">🔊</button>
+                </div>
+
+                <div class="flashcard-body-content">
+                  <span class="fc-tag-badge">ENGLISH TERM</span>
+                  <h2 id="fc-front-text" class="fc-english-term">English Word</h2>
+                  <p id="fc-front-hint" class="fc-sub-hint">Ascolta la pronuncia e prova a ricordare il significato in italiano</p>
+                </div>
+
+                <div class="flashcard-flip-prompt">
+                  <span>🔄 Clicca o tocca per girare la carta</span>
+                </div>
+              </div>
+
+              <!-- BACK -->
+              <div class="flashcard-face flashcard-back">
+                <div class="flashcard-top-indicator">
+                  <span class="fc-counter-badge" style="background:#DCFCE7; color:#15803D;">ITALIANO & CONTESTO</span>
+                  <button id="fc-back-tts" class="btn-tts-sm" title="Ascolta frase di esempio" aria-label="Ascolta frase d'esempio">🔊</button>
+                </div>
+
+                <div class="flashcard-body-content">
+                  <span class="fc-tag-badge" style="background:#FEF3C7; color:#B45309;">TRADUZIONE</span>
+                  <h3 id="fc-back-translation" class="fc-italian-translation">Traduzione</h3>
+
+                  <div id="fc-example-box" class="fc-example-box">
+                    <p id="fc-example-en" class="fc-example-en">"Example sentence in English."</p>
+                    <p id="fc-example-it" class="fc-example-it">"Traduzione in italiano della frase."</p>
+                  </div>
+
+                  <div id="fc-tip-box" class="fc-tip-box">
+                    💡 <span id="fc-tip-text">Consiglio pratico del docente</span>
+                  </div>
+                </div>
+
+                <div class="flashcard-flip-prompt">
+                  <span>🔄 Clicca per tornare al fronte</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigation Controls -->
+          <div class="study-nav-controls">
+            <button id="btn-fc-prev" class="btn-study-arrow" title="Carta precedente">
+              ← Precedente
+            </button>
+
+            <div class="study-middle-actions">
+              <button id="btn-fc-flip" class="btn-study-action" title="Gira la carta">
+                🔄 Gira Carta
+              </button>
+              <button id="btn-fc-shuffle" class="btn-study-action" title="Mescola le carte casualmente">
+                🔀 Mescola
+              </button>
+            </div>
+
+            <button id="btn-fc-next" class="btn-study-arrow primary" title="Carta successiva">
+              Successiva →
+            </button>
+          </div>
+
+          <!-- Self-Assessment Tracker -->
+          <div class="study-assessment-bar">
+            <div class="assessment-buttons">
+              <button id="btn-fc-need-review" class="btn-assess review" title="Segna come da rivedere">
+                🤔 Da ripassare (<span id="count-need-review">0</span>)
+              </button>
+              <button id="btn-fc-mastered" class="btn-assess mastered" title="Segna come imparata">
+                👍 Ho imparato! (<span id="count-mastered">0</span>)
+              </button>
+            </div>
+            <span id="fc-summary-label" class="fc-summary-label">Progresso studio: 0 / 6 completate</span>
+          </div>
+
+          <!-- Completed All Cards Banner -->
+          <div id="study-complete-banner" class="study-complete-card" style="display: none;">
+            <span style="font-size: 2.2rem; display: block; margin-bottom: 6px;">🎉</span>
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: #1E293B;">Ottimo ripasso completato!</h3>
+            <p style="font-size: 0.9rem; color: #475569; margin: 6px 0 16px;">
+              Hai rivisto tutte le carte di <strong><span id="complete-topic-name"></span></strong>. Ora mettiti alla prova e verifica quanto hai imparato!
+            </p>
+            <button id="btn-complete-start-quiz" class="btn-primary-study-quiz" style="font-size: 1rem; padding: 10px 24px;">
+              🎯 Inizia il Quiz Subito <span>→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. GRAMMAR RULES & SCHEDA DIDATTICA VIEW -->
+        <div id="study-rules-view" class="study-content-panel" style="display: none;">
+          <div class="rules-detail-card">
+            <div class="rules-hero-box">
+              <h3 id="rules-title" class="rules-heading">Regola Didattica</h3>
+              <p id="rules-explanation" class="rules-main-text">Spiegazione didattica in italiano chiaro...</p>
+            </div>
+
+            <div id="rules-formula-card" class="rules-formula-card">
+              <span class="formula-label">📐 STRUTTURA / FORMULA</span>
+              <div id="rules-formula-text" class="formula-content">Soggetto + Forma base...</div>
+            </div>
+
+            <div id="rules-forms-container" class="rules-forms-container">
+              <!-- Rendered dynamically (Positive, Negative, Question forms) -->
+            </div>
+
+            <div id="rules-trap-card" class="rules-trap-card">
+              <div class="trap-header">⚠️ Attenzione all'errore comune! (Common Trap)</div>
+              <p id="rules-trap-text" class="trap-body">Gli studenti italiani spesso sbagliano...</p>
+            </div>
+
+            <!-- Audio Examples List -->
+            <div class="rules-examples-box">
+              <h4 style="font-size: 1rem; font-weight: 800; color: #1E293B; margin-bottom: 10px;">
+                🗣️ Esempi da ascoltare e ripetere:
+              </h4>
+              <div id="rules-examples-list" class="rules-examples-grid">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+
+            <div style="margin-top: 24px; text-align: center;">
+              <button id="btn-rules-start-quiz" class="btn-primary-study-quiz" style="padding: 12px 28px; font-size: 1rem;">
+                🎯 Ho capito la regola! Inizia il Quiz <span>→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- QUIZ VIEW INTERFACE -->
+      <!-- ============================================== -->
+      <section id="quiz-container" class="quiz-container" aria-live="polite">
+        <!-- Quiz Header Info -->
+        <div class="quiz-header-card">
+          <div class="quiz-top-row">
+            <div class="quiz-title-badge">
+              <button id="btn-exit-quiz" class="btn-icon" title="Esci dal quiz" aria-label="Esci dal quiz">
+                ←
+              </button>
+              <div>
+                <h3 id="quiz-cat-name" class="quiz-cat-name">Nome Argomento</h3>
+                <span id="quiz-level-tag" class="quiz-level-tag beginner">BEGINNER</span>
+              </div>
+            </div>
+
+            <div class="quiz-indicators">
+              <div class="indicator-chip" id="quiz-question-counter">Domanda 1 di 5</div>
+              <div class="indicator-chip" id="quiz-score-indicator" style="color:#4F46E5;">Punti: 0</div>
+              <div class="indicator-chip" id="quiz-streak-indicator">🎯 In corso</div>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="progress-track" aria-label="Avanzamento del quiz">
+            <div id="quiz-progress-fill" class="progress-fill"></div>
+          </div>
+        </div>
+
+        <!-- Question Body Card -->
+        <div class="question-card">
+          <div class="question-prompt-row">
+            <h2 id="quiz-question-text" class="question-text">
+              Domanda in inglese qui...
+            </h2>
+            <button id="quiz-tts-btn" class="btn-tts" title="Ascolta la pronuncia in inglese" aria-label="Ascolta pronuncia">
+              🔊
+            </button>
+          </div>
+
+          <!-- Hint Bar -->
+          <div class="question-hint-bar">
+            <span style="font-weight:700; color:#4F46E5;">💡 Suggerimento didattico:</span>
+            <span id="quiz-hint-text" class="hint-text">Suggerimento qui...</span>
+            <button id="quiz-reveal-hint" class="btn-reveal-hint">Mostra aiuto</button>
+          </div>
+
+          <!-- Options Grid (A, B, C, D) -->
+          <div id="quiz-options-grid" class="options-grid">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <!-- Didactic Explanation Box -->
+          <div id="explanation-card" class="explanation-card">
+            <div id="exp-title" class="exp-header">🎉 Risposta Corretta!</div>
+            <div id="exp-text" class="exp-body">
+              Spiegazione grammaticale dettagliata...
+            </div>
+            <div class="exp-actions">
+              <button id="btn-next-question" class="btn-next">
+                Prossima Domanda <span>→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- QUIZ RESULTS SCREEN -->
+      <!-- ============================================== -->
+      <section id="results-container" class="results-container">
+        <div class="results-trophy">🏆</div>
+        <h2 id="res-title" class="results-title">Quiz Completato!</h2>
+        <p id="res-subtitle" class="results-subtitle">Ottimo lavoro!</p>
+
+        <div class="score-display-card">
+          <div id="res-score-percentage" class="score-percentage">100%</div>
+          <div id="res-score-stars" class="score-stars">⭐⭐⭐</div>
+          
+          <div class="score-stats-grid">
+            <div class="res-stat-item">
+              <div id="res-correct-count" class="res-stat-val" style="color:#059669;">5</div>
+              <div class="res-stat-label">Corrette</div>
+            </div>
+            <div class="res-stat-item">
+              <div id="res-wrong-count" class="res-stat-val" style="color:#DC2626;">0</div>
+              <div class="res-stat-label">Errori</div>
+            </div>
+            <div class="res-stat-item">
+              <div id="res-accuracy" class="res-stat-val" style="color:#4F46E5;">100%</div>
+              <div class="res-stat-label">Accuratezza</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="results-actions">
+          <button id="btn-result-retry" class="btn-result-retry">
+            🔁 Riprova questo Quiz
+          </button>
+          <button id="btn-result-review" class="btn-result-review" style="display:none;">
+            🎯 Rivedi solo gli Errori
+          </button>
+          <button id="btn-result-home" class="btn-result-home">
+            🏠 Torna alla Home
+          </button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-bar">
+      <p>
+        <strong>Chiado Finest</strong> • Applicazione Didattica di Lingua Inglese per la Scuola Media (11-14 anni).
+      </p>
+      <p style="margin-top: 4px; font-size: 0.75rem;">
+        100% Gratuita • Nessuna registrazione • Nessun dato personale • Installabile come PWA • Pronta per GitHub Pages.
+      </p>
+    </footer>
+
+    <!-- TEACHER & QR CODE MODAL -->
+    <div id="teacher-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="teacher-modal-title">
+      <div class="modal-box">
+        <button id="close-teacher-modal" class="modal-close-btn" aria-label="Chiudi finestra">✕</button>
+        <h3 id="teacher-modal-title" class="modal-title">👨‍🏫 Area Docente & Condivisione LIM</h3>
+        <p class="modal-desc">
+          Mostra questo QR Code sulla Lavagna Interattiva (LIM) o stampalo per consentire agli studenti di aprire istantaneamente l'app su smartphone o tablet senza digitare URL complicati.
+        </p>
+
+        <div class="qr-box-center">
+          <div id="qr-svg-holder" class="qr-svg-holder">
+            <!-- Pure SVG QR Code generated in JS -->
+          </div>
+          <input type="text" id="qr-url-input" class="qr-url-input" title="Modifica l'URL se pubblichi su GitHub Pages" />
+          <small style="color:#64748B; font-size:0.75rem; margin-top:6px;">Puoi incollare l'indirizzo del tuo sito GitHub Pages per aggiornare il QR Code in tempo reale.</small>
+        </div>
+
+        <!-- Download for GitHub Pages Box -->
+        <div class="download-box">
+          <h4>📦 Distribuzione su GitHub Pages</h4>
+          <p>
+            Tutti i file sono statici (HTML, CSS, JS, icone e manifest) con percorsi relativi. Puoi scaricare l'intero pacchetto pronto all'uso con un solo clic:
+          </p>
+          <button id="btn-download-zip" class="btn-zip-download">
+            📥 Scarica Pacchetto GitHub Pages (.ZIP)
+          </button>
+        </div>
+
+        <div style="font-size:0.82rem; color:#475569; line-height:1.5;">
+          <strong>Come pubblicare su GitHub Pages in 3 passi:</strong><br/>
+          1. Crea un repository pubblico su GitHub (es. <code>chiado-finest</code>).<br/>
+          2. Carica i file scompattati nella cartella principale (root).<br/>
+          3. Nelle impostazioni del repository, vai su <em>Pages</em> e seleziona come Branch <em>main / root</em>. L'app sarà subito online!
+        </div>
+      </div>
+    </div>
+
+    <!-- IOS SAFARI INSTALL GUIDE MODAL -->
+    <div id="ios-guide-modal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-box" style="max-width:440px; text-align:center;">
+        <button id="close-ios-guide" class="modal-close-btn" aria-label="Chiudi finestra">✕</button>
+        <div style="font-size:3rem; margin-bottom:8px;">📲</div>
+        <h3 class="modal-title">Installa su iPhone o iPad</h3>
+        <div style="text-align:left; font-size:0.92rem; color:#334155; line-height:1.6; margin: 16px 0;">
+          <p>Per aggiungere <strong>Chiado Finest</strong> alla schermata home del tuo dispositivo iOS:</p>
+          <ol style="margin-left: 20px; margin-top: 8px;">
+            <li>Tocca l'icona <strong>Condividi</strong> <span style="font-size:1.1rem;">(quadrato con freccia verso l'alto ⎋)</span> nella barra inferiore di Safari.</li>
+            <li>Scorri il menu verso il basso e seleziona <strong>Aggiungi alla schermata Home</strong>.</li>
+            <li>Tocca <strong>Aggiungi</strong> in alto a destra. L'app comparirà tra le tue applicazioni!</li>
+          </ol>
+        </div>
+        <button onclick="document.getElementById('ios-guide-modal').classList.remove('active')" class="btn-next" style="width:100%; justify-content:center;">
+          Ho capito!
+        </button>
+      </div>
+    </div>
+
+    <!-- Confetti Canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Vanilla Javascript (No build step required for GitHub Pages) -->
+    <script type="module" src="./script.js"></script>
+  </body>
+</html>
